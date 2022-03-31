@@ -9,6 +9,9 @@ import torch.nn as nn
 import torch.nn.functional as F
 from Layers import layers
 
+''' The VGG lottery model consists of classes for different types of blocks (Conv/Conv+BN). They then create a common framework for the VGG class where based on the type of 
+architecture selected, one can create a list of layers as per the architecture and wrap it in a nn.Sequential() to create the network.'''
+
 class ConvModule(nn.Module):
     """A single convolutional module in a VGG network."""
 
@@ -48,7 +51,7 @@ class VGG(nn.Module):
         self.layers = nn.Sequential(*layer_list)        
 
         self.fc = layers.Linear(512, num_classes)
-        if dense_classifier:
+        if dense_classifier:       # If Dense_classifier, the layers are nn.Linear i.e. we don't use any masking of weights/biases here.
             self.fc = nn.Linear(512, num_classes)
 
         self._initialize_weights()
