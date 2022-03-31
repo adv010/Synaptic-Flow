@@ -6,7 +6,13 @@ from torch.nn import init
 from torch.nn.parameter import Parameter
 from torch.nn.modules.utils import _pair
 
+''' Layers module defines classes of different layers, one for each type. The authors use register_buffers for weight masks.
+By making them register buffers, they are a part of the state_dict but cannot be changed by the optimizer. 
+In every forward pass, the weights and bias(if true) are multiplied with their respective masks, and then the call to Pytorch linear function
+is done via return F.linear(x,w,b)
 
+The weight mask is a tensor of ones with same shape as weight. Similar for bias.
+'''
 class Linear(nn.Linear):
     def __init__(self, in_features, out_features, bias=True):
         super(Linear, self).__init__(in_features, out_features, bias)        
